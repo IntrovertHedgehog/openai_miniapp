@@ -25,5 +25,3 @@
   - This features measures similarity between two sentences.
   - We can find the prompts in our question bank, that is more similar to the question asked by users, and provide the answer.
 - If continuing with fine-tuning, more training data, and data to teach it how to say "I don't know" is needed.
-
-## Demostrations
