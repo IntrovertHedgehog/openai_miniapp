@@ -16,7 +16,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ animal: question }),
+        body: JSON.stringify({ question: question }),
       });
 
       const data = await response.json();
@@ -50,7 +50,10 @@ export default function Home() {
             name="question"
             placeholder="Enter a Question"
             value={question}
-            onChange={(e) => setQuestion(e.target.value)}
+            onChange={(e) => {
+              setQuestion(e.target.value);
+              console.log(question);
+            }}
           />
           <input type="submit" value="Send" />
         </form>

@@ -1,6 +1,7 @@
 import { Configuration, OpenAIApi } from "openai";
 
 const configuration = new Configuration({
+  organization: "org-dGKrz9SNnnaNKL8kjdvYGKY8",
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
@@ -15,8 +16,8 @@ export default async function (req, res) {
     return;
   }
 
-  const animal = req.body.animal || '';
-  if (animal.trim().length === 0) {
+  const question = req.body.question || '';
+  if (question.trim().length === 0) {
     res.status(400).json({
       error: {
         message: "Please enter a valid question",
@@ -26,11 +27,15 @@ export default async function (req, res) {
   }
 
   try {
+    console.log(generatePrompt(question));
     const completion = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: generatePrompt(animal),
-      temperature: 0.6,
+      model: "curie:ft-personal:v0-1-2023-03-28-15-23-23",
+      prompt: generatePrompt(question),
+      temperature: 0.1,
+      stop: ["###"],
+      max_tokens: 100
     });
+    console.log(completion);
     res.status(200).json({ result: completion.data.choices[0].text });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
@@ -48,6 +53,8 @@ export default async function (req, res) {
   }
 }
 
-function generatePrompt(animal) {
-
+function generatePrompt(question) {
+  const suffix = "\n\n###\n\n"
+  const question_trimmed = question.replace(/s+/g, ' ').trim();
+  return `${question_trimmed}${suffix}`
 }
