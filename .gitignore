@@ -35,3 +35,4 @@ data
 
 # firebase
 /.firebase/
+.firebase-debug.log
