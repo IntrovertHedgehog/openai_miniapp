@@ -4,30 +4,51 @@ import styles from "./index.module.css";
 import { FaHeartbeat } from "react-icons/fa"
 import { IconContext } from "react-icons";
 
+
 export default function Home() {
   const [question, setQuestion] = useState("");
   const [result, setResult] = useState();
+  const [options, setOptions] = useState([]);
 
-  async function onSubmit(event) {
+
+  // async function onSubmit(event) {
+  //   event.preventDefault();
+  //   try {
+  //     const response = await fetch("/api/generate", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ question: question }),
+  //     });
+
+  //     const data = await response.json();
+  //     if (response.status !== 200) {
+  //       throw data.error || new Error(`Request failed with status ${response.status}`);
+  //     }
+
+  //     setResult(data.result);
+  //     setQuestion("");
+  //   } catch (error) {
+  //     // Consider implementing your own error handling logic here
+  //     console.error(error);
+  //     alert(error.message);
+  //   }
+  // }
+
+  async function getQns(event) {
     event.preventDefault();
+    setResult('');
     try {
-      const response = await fetch("/api/generate", {
+      const top3 = await fetch("/api/embbeding", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ question: question }),
-      });
-
-      const data = await response.json();
-      if (response.status !== 200) {
-        throw data.error || new Error(`Request failed with status ${response.status}`);
-      }
-
-      setResult(data.result);
-      setQuestion("");
+        body: JSON.stringify({ input: question }),
+      })
+      setOptions(await top3.json());
     } catch (error) {
-      // Consider implementing your own error handling logic here
       console.error(error);
       alert(error.message);
     }
@@ -44,7 +65,7 @@ export default function Home() {
           <FaHeartbeat className={styles.icon} />
         </IconContext.Provider>
         <h3>Ask a Health Question</h3>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={getQns}>
           <input
             type="text"
             name="question"
@@ -55,8 +76,13 @@ export default function Home() {
               console.log(question);
             }}
           />
-          <input type="submit" value="Send" />
+          <input type="submit" value="Submit" />
         </form>
+        {options.map((option) =>
+          <button onClick={() => setResult(option.answer)}>
+            {option.question}
+          </button >
+        )}
         <div className={styles.result}>{result}</div>
       </main>
     </div>

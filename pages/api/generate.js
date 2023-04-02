@@ -27,7 +27,6 @@ export default async function (req, res) {
   }
 
   try {
-    console.log(generatePrompt(question));
     const completion = await openai.createCompletion({
       model: "curie:ft-personal:v0-1-2023-03-28-15-23-23",
       prompt: generatePrompt(question),
@@ -35,12 +34,10 @@ export default async function (req, res) {
       stop: ["###"],
       max_tokens: 100
     });
-    console.log(completion);
     res.status(200).json({ result: completion.data.choices[0].text });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
-      console.error(error.response.status, error.response.data);
       res.status(error.response.status).json(error.response.data);
     } else {
       console.error(`Error with OpenAI API request: ${error.message}`);
