@@ -32,10 +32,10 @@ export default function TreeIndex() {
   return (
     <div>
       <Head>
-        <Navigator />
         <title>Llama Tree Index</title>
         <link rel="icon" href="/dog.png" />
       </Head>
+      <Navigator />
       <main className={styles.main}>
         <IconContext.Provider value={{ size: "5em" }}>
           <FaHeartbeat className={styles.icon} />

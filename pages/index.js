@@ -32,10 +32,10 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <Navigator />
         <title>Embbeding</title>
         <link rel="icon" href="/dog.png" />
       </Head>
+      <Navigator />
       <main className={styles.main}>
         <IconContext.Provider value={{ size: "5em" }}>
           <FaHeartbeat className={styles.icon} />
