@@ -1,7 +1,7 @@
+import root from './root.js'
 export default async function (req, res) {
   try {
-    const index_res = await fetch("https://oyster-app-99rix.ondigitalocean.app/vector_store_index", {
-    // const index_res = await fetch("http://127.0.0.1:5000/tree_index", {
+    const index_res = await fetch(`${root}/vector_store_index`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

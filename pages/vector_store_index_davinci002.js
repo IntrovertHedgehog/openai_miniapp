@@ -4,26 +4,25 @@ import styles from "./index.module.css";
 import { FaHeartbeat } from "react-icons/fa"
 import { IconContext } from "react-icons";
 import Navigator from "../components/navigator";
+import ClipLoader from "react-spinners/ClipLoader";
 
-
-export default function Home() {
+export default function TreeIndex() {
   const [question, setQuestion] = useState("");
-  const [result, setResult] = useState();
-  const [options, setOptions] = useState([]);
+  const [result, setResult] = useState(' ');
 
   async function getQns(event) {
     event.preventDefault();
-    setOptions([])
     setResult('');
     try {
-      const top3 = await fetch("/api/embbeding", {
+      const res = await fetch("/api/vector_store_index_davinci002", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ input: question }),
       })
-      setOptions(await top3.json());
+      const jsonRes = await res.json();
+      setResult(jsonRes.response || "Sorry. This question is unanswerable.");
     } catch (error) {
       console.error(error);
       alert(error.message);
@@ -33,7 +32,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Embedding</title>
+        <title>Llama Vector Store Index</title>
         <link rel="icon" href="/dog.png" />
       </Head>
       <Navigator />
@@ -42,7 +41,7 @@ export default function Home() {
           <FaHeartbeat className={styles.icon} />
         </IconContext.Provider>
         <h3>Ask a Health Question</h3>
-        <form onSubmit={getQns}>
+        <form onSubmit={getQns} style={{marginBottom: "40px"}}>
           <input
             type="text"
             name="question"
@@ -55,11 +54,7 @@ export default function Home() {
           />
           <input type="submit" value="Submit" />
         </form>
-        {options.map((option) =>
-          <button onClick={() => setResult(option.answer)}>
-            {option.question}
-          </button >
-        )}
+        <ClipLoader loading={result == ''} size={50} />
         <div className={styles.result}>
           {result}
         </div>
